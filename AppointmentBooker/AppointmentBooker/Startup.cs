@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using AppointmentBooker.Data;
 using AppointmentBooker.Models;
 using AppointmentBooker.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace AppointmentBooker
 {
@@ -59,7 +60,7 @@ namespace AppointmentBooker
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, RoleManager<IdentityRole> roleManager)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -78,6 +79,9 @@ namespace AppointmentBooker
             app.UseStaticFiles();
 
             app.UseIdentity();
+
+            // Seed Role data
+            RolesData.SeedRoles(roleManager).Wait();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
